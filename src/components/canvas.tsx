@@ -51,15 +51,16 @@ const Canvas = () => {
     player: Player;
     boundary: Boundary;
   }): boolean {
+    const padding = Boundary.WIDTH / 2 - player.radius - 1;
     return (
       player.position.y - player.radius + player.velocity.y <=
-        boundary.position.y + boundary.height &&
+        boundary.position.y + boundary.height + padding &&
       player.position.x + player.radius + player.velocity.x >=
-        boundary.position.x &&
+        boundary.position.x - padding &&
       player.position.y + player.radius + player.velocity.y >=
-        boundary.position.y &&
+        boundary.position.y - padding &&
       player.position.x - player.radius + player.velocity.x <=
-        boundary.position.x + boundary.width
+        boundary.position.x + boundary.width + padding
     );
   }
   useEffect(() => {
@@ -301,7 +302,7 @@ const Canvas = () => {
           y: Boundary.HEIGHT + Boundary.HEIGHT / 2,
         },
         velocity: {
-          x: 5,
+          x: Ghost.speed,
           y: 0,
         },
         color: "red",
@@ -436,7 +437,7 @@ const Canvas = () => {
                 draw: ghost.draw,
                 update: ghost.update,
                 velocity: {
-                  x: 5,
+                  x: ghost.speed,
                   y: 0,
                 },
               },
@@ -453,7 +454,7 @@ const Canvas = () => {
                 draw: ghost.draw,
                 update: ghost.update,
                 velocity: {
-                  x: -5,
+                  x: -ghost.speed,
                   y: 0,
                 },
               },
@@ -471,7 +472,7 @@ const Canvas = () => {
                 update: ghost.update,
                 velocity: {
                   x: 0,
-                  y: -5,
+                  y: -ghost.speed,
                 },
               },
               boundary,
@@ -488,7 +489,7 @@ const Canvas = () => {
                 update: ghost.update,
                 velocity: {
                   x: 0,
-                  y: 5,
+                  y: ghost.speed,
                 },
               },
               boundary,
@@ -522,20 +523,20 @@ const Canvas = () => {
 
           switch (direction) {
             case "down":
-              ghost.velocity.y = 5;
+              ghost.velocity.y = ghost.speed;
               ghost.velocity.x = 0;
               break;
             case "up":
-              ghost.velocity.y = -5;
+              ghost.velocity.y = -ghost.speed;
               ghost.velocity.x = 0;
               break;
             case "left":
               ghost.velocity.y = 0;
-              ghost.velocity.x = -5;
+              ghost.velocity.x = -ghost.speed;
               break;
             case "right":
               ghost.velocity.y = 0;
-              ghost.velocity.x = 5;
+              ghost.velocity.x = ghost.speed;
               break;
           }
           ghost.prevCollisions = [];

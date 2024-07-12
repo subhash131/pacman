@@ -4,24 +4,29 @@ type GhostConstructor = {
   position: Position;
   velocity: Velocity;
   radius?: number;
+  speed?: number;
   color?: string;
   canvasContext: CanvasRenderingContext2D;
 };
 
 export class Ghost {
+  static speed: number = 2;
   position: Position;
   velocity: Velocity;
   radius: number;
   color: string;
   canvasContext: CanvasRenderingContext2D;
   prevCollisions: string[];
+  speed: number;
   constructor({
     color = "pink",
     position,
     velocity,
     radius = 15,
     canvasContext,
+    speed = 2,
   }: GhostConstructor) {
+    this.speed = speed;
     this.position = position;
     this.velocity = velocity;
     this.radius = radius;
