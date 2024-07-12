@@ -1,5 +1,6 @@
 "use client";
 import { Boundary } from "@/classes/Boundary";
+import { Ghost } from "@/classes/Ghost";
 import { Pellet } from "@/classes/Pellet";
 import { Player } from "@/classes/Player";
 import { map } from "@/constants";
@@ -12,6 +13,7 @@ const Canvas = () => {
 
   const boundaries: Boundary[] = useMemo(() => [], []);
   const pellets: Pellet[] = useMemo(() => [], []);
+  const ghosts: Ghost[] = useMemo(() => [], []);
   let player: Player | null = null;
   let lastKey = " ";
   const keys = {
@@ -277,6 +279,20 @@ const Canvas = () => {
       },
       radius: 15,
     });
+    ghosts.push(
+      new Ghost({
+        canvasContext: context,
+        position: {
+          x: Boundary.WIDTH * 6 + Boundary.WIDTH / 2,
+          y: Boundary.HEIGHT + Boundary.HEIGHT / 2,
+        },
+        velocity: {
+          x: 0,
+          y: 0,
+        },
+        color: "red",
+      })
+    );
 
     // draw
     function animate() {
@@ -376,8 +392,8 @@ const Canvas = () => {
           player.velocity.x = 0;
         }
       });
-      player.update();
 
+      player.update();
       for (let idx = pellets.length - 1; idx >= 0; idx--) {
         const pellet = pellets[idx];
         if (!player) return;
@@ -393,6 +409,8 @@ const Canvas = () => {
           setScore((prev) => prev + 1);
         }
       }
+
+      ghosts.forEach((ghost) => ghost.update());
     }
 
     animate();
