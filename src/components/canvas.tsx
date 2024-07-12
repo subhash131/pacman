@@ -310,9 +310,10 @@ const Canvas = () => {
     );
 
     // draw
+    let animationId: number;
     function animate() {
       if (!canvasRef.current || !player) return;
-      requestAnimationFrame(animate);
+      animationId = requestAnimationFrame(animate);
 
       context?.clearRect(
         0,
@@ -426,7 +427,19 @@ const Canvas = () => {
       }
 
       ghosts.forEach((ghost) => {
+        if (!player) return;
         ghost.update();
+
+        if (
+          Math.hypot(
+            ghost.position.x - player.position.x,
+            ghost.position.y - player.position.y
+          ) <
+          ghost.radius + player.radius
+        ) {
+          // Game over
+          cancelAnimationFrame(animationId);
+        }
         const collisions: string[] = [];
         boundaries.forEach((boundary) => {
           if (
@@ -516,7 +529,6 @@ const Canvas = () => {
           const pathWays = ghost.prevCollisions.filter((collision) => {
             return !collisions.includes(collision);
           });
-          console.log("path", pathWays);
 
           const direction =
             pathWays[Math.floor(Math.random() * pathWays.length)];
