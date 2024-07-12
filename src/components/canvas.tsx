@@ -278,6 +278,19 @@ const Canvas = () => {
               })
             );
             break;
+          case "p":
+            if (!context) return;
+            pellets.push(
+              new Pellet({
+                radius: 10,
+                canvasContext: context,
+                position: {
+                  x: j * Boundary.WIDTH + Boundary.WIDTH / 2,
+                  y: i * Boundary.HEIGHT + Boundary.HEIGHT / 2,
+                },
+              })
+            );
+            break;
         }
       });
     });
@@ -306,6 +319,20 @@ const Canvas = () => {
           y: 0,
         },
         color: "red",
+      })
+    );
+    ghosts.push(
+      new Ghost({
+        canvasContext: context,
+        position: {
+          x: Boundary.WIDTH * 7 + Boundary.WIDTH / 2,
+          y: Boundary.HEIGHT + Boundary.HEIGHT / 2,
+        },
+        velocity: {
+          x: Ghost.speed,
+          y: 0,
+        },
+        color: "pink",
       })
     );
 
@@ -427,7 +454,16 @@ const Canvas = () => {
             // game won
             setTimeout(() => {
               cancelAnimationFrame(animationId);
-            }, 200);
+            }, 100);
+          }
+          if (pellet.radius === 10) {
+            ghosts.forEach((ghost) => {
+              ghost.scared = true;
+              setTimeout(function () {
+                ghost.scared = false;
+              }, 3000);
+              console.log(ghost.scared);
+            });
           }
         }
       }

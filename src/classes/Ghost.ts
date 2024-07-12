@@ -10,7 +10,7 @@ type GhostConstructor = {
 };
 
 export class Ghost {
-  static speed: number = 2;
+  public static speed: number = 2;
   position: Position;
   velocity: Velocity;
   radius: number;
@@ -18,6 +18,7 @@ export class Ghost {
   canvasContext: CanvasRenderingContext2D;
   prevCollisions: string[];
   speed: number;
+  scared: boolean;
   constructor({
     color = "pink",
     position,
@@ -33,6 +34,7 @@ export class Ghost {
     this.color = color;
     this.canvasContext = canvasContext;
     this.prevCollisions = [];
+    this.scared = false;
   }
 
   draw() {
@@ -44,7 +46,7 @@ export class Ghost {
       0,
       Math.PI * 2
     );
-    this.canvasContext.fillStyle = this.color;
+    this.canvasContext.fillStyle = this.scared ? "blue" : this.color;
     this.canvasContext.fill();
     this.canvasContext.closePath();
   }
