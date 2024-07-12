@@ -6,6 +6,8 @@ import { Player } from "@/classes/Player";
 import { map } from "@/constants";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
+const imageCache: { [key: string]: HTMLImageElement } = {};
+
 const Canvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   let context: CanvasRenderingContext2D | null;
@@ -16,6 +18,18 @@ const Canvas = () => {
   const ghosts: Ghost[] = useMemo(() => [], []);
   let player: Player | null = null;
   let lastKey = " ";
+
+  const createImg = (src: string) => {
+    if (imageCache && imageCache[src]) {
+      return imageCache[src];
+    } else {
+      const image = new Image();
+      image.src = src;
+      imageCache[src] = image;
+      return image;
+    }
+  };
+
   const keys = {
     a: {
       pressed: false,
@@ -62,7 +76,7 @@ const Canvas = () => {
           case "-":
             boundaries.push(
               new Boundary({
-                image: "/pipeHorizontal.png",
+                image: createImg("/pipeHorizontal.png"),
                 position: {
                   x: j * Boundary.WIDTH,
                   y: i * Boundary.HEIGHT,
@@ -74,7 +88,7 @@ const Canvas = () => {
           case "|":
             boundaries.push(
               new Boundary({
-                image: "/pipeVertical.png",
+                image: createImg("/pipeVertical.png"),
                 position: {
                   x: j * Boundary.WIDTH,
                   y: i * Boundary.HEIGHT,
@@ -86,7 +100,7 @@ const Canvas = () => {
           case "1":
             boundaries.push(
               new Boundary({
-                image: "/pipeCorner1.png",
+                image: createImg("/pipeCorner1.png"),
                 position: {
                   x: j * Boundary.WIDTH,
                   y: i * Boundary.HEIGHT,
@@ -98,7 +112,7 @@ const Canvas = () => {
           case "2":
             boundaries.push(
               new Boundary({
-                image: "/pipeCorner2.png",
+                image: createImg("/pipeCorner2.png"),
                 position: {
                   x: j * Boundary.WIDTH,
                   y: i * Boundary.HEIGHT,
@@ -110,7 +124,7 @@ const Canvas = () => {
           case "3":
             boundaries.push(
               new Boundary({
-                image: "/pipeCorner3.png",
+                image: createImg("/pipeCorner3.png"),
                 position: {
                   x: j * Boundary.WIDTH,
                   y: i * Boundary.HEIGHT,
@@ -122,7 +136,7 @@ const Canvas = () => {
           case "4":
             boundaries.push(
               new Boundary({
-                image: "/pipeCorner4.png",
+                image: createImg("/pipeCorner4.png"),
                 position: {
                   x: j * Boundary.WIDTH,
                   y: i * Boundary.HEIGHT,
@@ -134,7 +148,7 @@ const Canvas = () => {
           case "b":
             boundaries.push(
               new Boundary({
-                image: "/block.png",
+                image: createImg("/block.png"),
                 position: {
                   x: j * Boundary.WIDTH,
                   y: i * Boundary.HEIGHT,
@@ -151,7 +165,7 @@ const Canvas = () => {
                   x: j * Boundary.WIDTH,
                   y: i * Boundary.HEIGHT,
                 },
-                image: "/capLeft.png",
+                image: createImg("/capLeft.png"),
               })
             );
             break;
@@ -163,7 +177,7 @@ const Canvas = () => {
                   x: j * Boundary.WIDTH,
                   y: i * Boundary.HEIGHT,
                 },
-                image: "/capRight.png",
+                image: createImg("/capRight.png"),
               })
             );
             break;
@@ -175,7 +189,7 @@ const Canvas = () => {
                   x: j * Boundary.WIDTH,
                   y: i * Boundary.HEIGHT,
                 },
-                image: "/capBottom.png",
+                image: createImg("/capBottom.png"),
               })
             );
             break;
@@ -187,7 +201,7 @@ const Canvas = () => {
                   x: j * Boundary.WIDTH,
                   y: i * Boundary.HEIGHT,
                 },
-                image: "/capTop.png",
+                image: createImg("/capTop.png"),
               })
             );
             break;
@@ -199,7 +213,7 @@ const Canvas = () => {
                   x: j * Boundary.WIDTH,
                   y: i * Boundary.HEIGHT,
                 },
-                image: "/pipeCross.png",
+                image: createImg("/pipeCross.png"),
               })
             );
             break;
@@ -211,7 +225,7 @@ const Canvas = () => {
                   x: j * Boundary.WIDTH,
                   y: i * Boundary.HEIGHT,
                 },
-                image: "/pipeConnectorTop.png",
+                image: createImg("/pipeConnectorTop.png"),
               })
             );
             break;
@@ -223,7 +237,7 @@ const Canvas = () => {
                   x: j * Boundary.WIDTH,
                   y: i * Boundary.HEIGHT,
                 },
-                image: "/pipeConnectorRight.png",
+                image: createImg("/pipeConnectorRight.png"),
               })
             );
             break;
@@ -235,7 +249,7 @@ const Canvas = () => {
                   x: j * Boundary.WIDTH,
                   y: i * Boundary.HEIGHT,
                 },
-                image: "/pipeConnectorBottom.png",
+                image: createImg("/pipeConnectorBottom.png"),
               })
             );
             break;
@@ -247,7 +261,7 @@ const Canvas = () => {
                   x: j * Boundary.WIDTH,
                   y: i * Boundary.HEIGHT,
                 },
-                image: "/pipeConnectorLeft.png",
+                image: createImg("/pipeConnectorLeft.png"),
               })
             );
             break;

@@ -3,7 +3,7 @@ import { Position } from "@/types";
 type BoundaryConstructor = {
   position: Position;
   canvasContext: CanvasRenderingContext2D;
-  image: string;
+  image: HTMLImageElement;
 };
 
 export class Boundary {
@@ -16,7 +16,7 @@ export class Boundary {
   width: number;
   height: number;
   canvasContext: CanvasRenderingContext2D;
-  image: string;
+  image: HTMLImageElement;
 
   constructor({ position, canvasContext, image }: BoundaryConstructor) {
     this.position = position;
@@ -27,10 +27,10 @@ export class Boundary {
   }
 
   draw() {
-    const image = new Image();
-    image.src = this.image;
-    image.width = this.width;
-    image.height = this.height;
-    this.canvasContext.drawImage(image, this.position.x, this.position.y);
+    // const image = new Image();
+    // image.src = this.image;
+    // image.width = this.width;
+    // image.height = this.height;
+    this.canvasContext.drawImage(this.image, this.position.x, this.position.y);
   }
 }
