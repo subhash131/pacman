@@ -376,7 +376,9 @@ const Canvas = () => {
         }
       });
       player.update();
-      pellets.forEach((pellet, idx) => {
+
+      for (let idx = pellets.length - 1; idx >= 0; idx--) {
+        const pellet = pellets[idx];
         if (!player) return;
         pellet.draw();
         if (
@@ -388,7 +390,7 @@ const Canvas = () => {
         ) {
           pellets.splice(idx, 1);
         }
-      });
+      }
     }
 
     animate();
