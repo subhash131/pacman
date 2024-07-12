@@ -425,7 +425,9 @@ const Canvas = () => {
           setScore((prev) => prev + 1);
           if (pellets.length <= 0) {
             // game won
-            cancelAnimationFrame(animationId);
+            setTimeout(() => {
+              cancelAnimationFrame(animationId);
+            }, 200);
           }
         }
       }
