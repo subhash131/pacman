@@ -423,6 +423,10 @@ const Canvas = () => {
         ) {
           pellets.splice(idx, 1);
           setScore((prev) => prev + 1);
+          if (pellets.length <= 0) {
+            // game won
+            cancelAnimationFrame(animationId);
+          }
         }
       }
 
@@ -437,7 +441,7 @@ const Canvas = () => {
           ) <
           ghost.radius + player.radius
         ) {
-          // Game over
+          // Game lost
           cancelAnimationFrame(animationId);
         }
         const collisions: string[] = [];
