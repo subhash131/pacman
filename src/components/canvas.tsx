@@ -462,13 +462,12 @@ const Canvas = () => {
               setTimeout(function () {
                 ghost.scared = false;
               }, 5000);
-              console.log(ghost.scared);
             });
           }
         }
       }
 
-      ghosts.forEach((ghost) => {
+      ghosts.forEach((ghost, idx) => {
         if (!player) return;
         ghost.update();
 
@@ -479,7 +478,9 @@ const Canvas = () => {
           ) <
           ghost.radius + player.radius
         ) {
-          if (!ghost.scared) {
+          if (ghost.scared) {
+            ghosts.splice(idx, 1);
+          } else {
             // Game lost
             cancelAnimationFrame(animationId);
           }
