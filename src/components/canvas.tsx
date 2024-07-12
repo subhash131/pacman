@@ -249,8 +249,10 @@ const Canvas = () => {
             );
             break;
           case ".":
+            if (!context) return;
             pellets.push(
               new Pellet({
+                canvasContext: context,
                 position: {
                   x: j * Boundary.WIDTH + Boundary.WIDTH / 2,
                   y: i * Boundary.HEIGHT + Boundary.HEIGHT / 2,
@@ -374,6 +376,19 @@ const Canvas = () => {
         }
       });
       player.update();
+      pellets.forEach((pellet, idx) => {
+        if (!player) return;
+        pellet.draw();
+        if (
+          Math.hypot(
+            pellet.position.x - player?.position.x,
+            pellet.position.y - player.position.y
+          ) <
+          pellet.radius + player.radius
+        ) {
+          pellets.splice(idx, 1);
+        }
+      });
     }
 
     animate();
