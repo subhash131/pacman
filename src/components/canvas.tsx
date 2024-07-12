@@ -297,11 +297,11 @@ const Canvas = () => {
       new Ghost({
         canvasContext: context,
         position: {
-          x: Boundary.WIDTH * 7 + Boundary.WIDTH / 2,
+          x: Boundary.WIDTH * 6 + Boundary.WIDTH / 2,
           y: Boundary.HEIGHT + Boundary.HEIGHT / 2,
         },
         velocity: {
-          x: 0,
+          x: 5,
           y: 0,
         },
         color: "red",
@@ -426,6 +426,120 @@ const Canvas = () => {
 
       ghosts.forEach((ghost) => {
         ghost.update();
+        const collisions: string[] = [];
+        boundaries.forEach((boundary) => {
+          if (
+            !collisions.includes("right") &&
+            detectCollision({
+              player: {
+                ...ghost,
+                draw: ghost.draw,
+                update: ghost.update,
+                velocity: {
+                  x: 5,
+                  y: 0,
+                },
+              },
+              boundary,
+            })
+          ) {
+            collisions.push("right");
+          }
+          if (
+            !collisions.includes("left") &&
+            detectCollision({
+              player: {
+                ...ghost,
+                draw: ghost.draw,
+                update: ghost.update,
+                velocity: {
+                  x: -5,
+                  y: 0,
+                },
+              },
+              boundary,
+            })
+          ) {
+            collisions.push("left");
+          }
+          if (
+            !collisions.includes("up") &&
+            detectCollision({
+              player: {
+                ...ghost,
+                draw: ghost.draw,
+                update: ghost.update,
+                velocity: {
+                  x: 0,
+                  y: -5,
+                },
+              },
+              boundary,
+            })
+          ) {
+            collisions.push("up");
+          }
+          if (
+            !collisions.includes("down") &&
+            detectCollision({
+              player: {
+                ...ghost,
+                draw: ghost.draw,
+                update: ghost.update,
+                velocity: {
+                  x: 0,
+                  y: 5,
+                },
+              },
+              boundary,
+            })
+          ) {
+            collisions.push("down");
+          }
+        });
+        if (collisions.length > ghost.prevCollisions.length) {
+          ghost.prevCollisions = collisions;
+        }
+        if (
+          JSON.stringify(collisions) !== JSON.stringify(ghost.prevCollisions)
+        ) {
+          if (ghost.velocity.x > 0) {
+            ghost.prevCollisions.push("right");
+          } else if (ghost.velocity.x < 0) {
+            ghost.prevCollisions.push("left");
+          } else if (ghost.velocity.y < 0) {
+            ghost.prevCollisions.push("up");
+          } else if (ghost.velocity.y > 0) {
+            ghost.prevCollisions.push("down");
+          }
+          const pathWays = ghost.prevCollisions.filter((collision) => {
+            return !collisions.includes(collision);
+          });
+          console.log("path", pathWays);
+
+          const direction =
+            pathWays[Math.floor(Math.random() * pathWays.length)];
+
+          switch (direction) {
+            case "down":
+              ghost.velocity.y = 5;
+              ghost.velocity.x = 0;
+              break;
+            case "up":
+              ghost.velocity.y = -5;
+              ghost.velocity.x = 0;
+              break;
+            case "left":
+              ghost.velocity.y = 0;
+              ghost.velocity.x = -5;
+              break;
+            case "right":
+              ghost.velocity.y = 0;
+              ghost.velocity.x = 5;
+              break;
+          }
+          ghost.prevCollisions = [];
+        }
       });
     }
 
@@ -434,6 +548,7 @@ const Canvas = () => {
       // Cleanup function
       boundaries.length = 0;
       pellets.length = 0;
+      ghosts.length = 0;
       player = null;
       context = null;
     };

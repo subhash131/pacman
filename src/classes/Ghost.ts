@@ -14,6 +14,7 @@ export class Ghost {
   radius: number;
   color: string;
   canvasContext: CanvasRenderingContext2D;
+  prevCollisions: string[];
   constructor({
     color = "pink",
     position,
@@ -26,6 +27,7 @@ export class Ghost {
     this.radius = radius;
     this.color = color;
     this.canvasContext = canvasContext;
+    this.prevCollisions = [];
   }
 
   draw() {
