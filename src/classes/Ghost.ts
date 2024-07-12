@@ -4,7 +4,7 @@ type GhostConstructor = {
   position: Position;
   velocity: Velocity;
   radius?: number;
-  color: string;
+  color?: string;
   canvasContext: CanvasRenderingContext2D;
 };
 
@@ -15,7 +15,7 @@ export class Ghost {
   color: string;
   canvasContext: CanvasRenderingContext2D;
   constructor({
-    color,
+    color = "pink",
     position,
     velocity,
     radius = 15,
@@ -37,7 +37,7 @@ export class Ghost {
       0,
       Math.PI * 2
     );
-    this.canvasContext.fillStyle = "yellow";
+    this.canvasContext.fillStyle = this.color;
     this.canvasContext.fill();
     this.canvasContext.closePath();
   }
