@@ -297,7 +297,7 @@ const Canvas = () => {
       new Ghost({
         canvasContext: context,
         position: {
-          x: Boundary.WIDTH * 6 + Boundary.WIDTH / 2,
+          x: Boundary.WIDTH * 7 + Boundary.WIDTH / 2,
           y: Boundary.HEIGHT + Boundary.HEIGHT / 2,
         },
         velocity: {
@@ -424,7 +424,9 @@ const Canvas = () => {
         }
       }
 
-      ghosts.forEach((ghost) => ghost.update());
+      ghosts.forEach((ghost) => {
+        ghost.update();
+      });
     }
 
     animate();
