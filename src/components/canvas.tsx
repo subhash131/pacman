@@ -461,7 +461,7 @@ const Canvas = () => {
               ghost.scared = true;
               setTimeout(function () {
                 ghost.scared = false;
-              }, 3000);
+              }, 5000);
               console.log(ghost.scared);
             });
           }
@@ -479,8 +479,10 @@ const Canvas = () => {
           ) <
           ghost.radius + player.radius
         ) {
-          // Game lost
-          cancelAnimationFrame(animationId);
+          if (!ghost.scared) {
+            // Game lost
+            cancelAnimationFrame(animationId);
+          }
         }
         const collisions: string[] = [];
         boundaries.forEach((boundary) => {
