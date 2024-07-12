@@ -3,11 +3,12 @@ import { Boundary } from "@/classes/Boundary";
 import { Pellet } from "@/classes/Pellet";
 import { Player } from "@/classes/Player";
 import { map } from "@/constants";
-import React, { KeyboardEventHandler, useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 const Canvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   let context: CanvasRenderingContext2D | null;
+  const [score, setScore] = useState(0);
 
   const boundaries: Boundary[] = useMemo(() => [], []);
   const pellets: Pellet[] = useMemo(() => [], []);
@@ -48,7 +49,7 @@ const Canvas = () => {
   useEffect(() => {
     if (!canvasRef.current) return;
     canvasRef.current.width = innerWidth;
-    canvasRef.current.height = innerHeight;
+    canvasRef.current.height = innerHeight - 100;
     canvasRef.current.style.backgroundColor = "black";
     context = canvasRef.current.getContext("2d");
     if (!context) return;
@@ -389,69 +390,88 @@ const Canvas = () => {
           pellet.radius + player.radius
         ) {
           pellets.splice(idx, 1);
+          setScore((prev) => prev + 1);
         }
       }
     }
 
     animate();
+    return () => {
+      // Cleanup function
+      boundaries.length = 0;
+      pellets.length = 0;
+      player = null;
+      context = null;
+    };
   }, []);
 
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (!player) return;
+    switch (e.key.toLowerCase()) {
+      case "w":
+      case "ArrowUp".toLowerCase():
+        keys.w.pressed = true;
+        lastKey = "w";
+        break;
+      case "a":
+      case "ArrowLeft".toLowerCase():
+        keys.a.pressed = true;
+        lastKey = "a";
+        break;
+      case "s":
+      case "ArrowDown".toLowerCase():
+        keys.s.pressed = true;
+        lastKey = "s";
+        break;
+      case "d":
+      case "ArrowRight".toLowerCase():
+        keys.d.pressed = true;
+        lastKey = "d";
+        break;
+      case " ":
+        lastKey = " ";
+        player.velocity.x = 0;
+        player.velocity.y = 0;
+        break;
+    }
+  };
+  const handleKeyUp = (e: KeyboardEvent) => {
+    if (!player) return;
+    switch (e.key.toLowerCase()) {
+      case "w":
+      case "ArrowUp".toLowerCase():
+        keys.w.pressed = false;
+        break;
+      case "a":
+      case "ArrowLeft".toLowerCase():
+        keys.a.pressed = false;
+        break;
+      case "s":
+      case "ArrowDown".toLowerCase():
+        keys.s.pressed = false;
+        break;
+      case "d":
+      case "ArrowRight".toLowerCase():
+        keys.d.pressed = false;
+        break;
+    }
+  };
   //key control
   useEffect(() => {
-    addEventListener("keydown", (e) => {
-      if (!player) return;
-      switch (e.key.toLowerCase()) {
-        case "w":
-        case "ArrowUp".toLowerCase():
-          keys.w.pressed = true;
-          lastKey = "w";
-          break;
-        case "a":
-        case "ArrowLeft".toLowerCase():
-          keys.a.pressed = true;
-          lastKey = "a";
-          break;
-        case "s":
-        case "ArrowDown".toLowerCase():
-          keys.s.pressed = true;
-          lastKey = "s";
-          break;
-        case "d":
-        case "ArrowRight".toLowerCase():
-          keys.d.pressed = true;
-          lastKey = "d";
-          break;
-        case " ":
-          lastKey = " ";
-          player.velocity.x = 0;
-          player.velocity.y = 0;
-          break;
-      }
-    });
-    addEventListener("keyup", (e) => {
-      if (!player) return;
-      switch (e.key.toLowerCase()) {
-        case "w":
-        case "ArrowUp".toLowerCase():
-          keys.w.pressed = false;
-          break;
-        case "a":
-        case "ArrowLeft".toLowerCase():
-          keys.a.pressed = false;
-          break;
-        case "s":
-        case "ArrowDown".toLowerCase():
-          keys.s.pressed = false;
-          break;
-        case "d":
-        case "ArrowRight".toLowerCase():
-          keys.d.pressed = false;
-          break;
-      }
-    });
+    addEventListener("keydown", handleKeyDown);
+    addEventListener("keyup", handleKeyUp);
+    return () => {
+      removeEventListener("keydown", handleKeyDown);
+      removeEventListener("keyup", handleKeyUp);
+    };
   }, []);
 
-  return <canvas ref={canvasRef} />;
+  return (
+    <section className="bg-black w-full h-full">
+      <p className="text-white py-2">Score: {score}</p>
+      <canvas ref={canvasRef} />
+    </section>
+  );
 };
 
 export default Canvas;
