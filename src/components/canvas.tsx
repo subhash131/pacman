@@ -449,15 +449,17 @@ const Canvas = () => {
           pellet.radius + player.radius
         ) {
           pellets.splice(idx, 1);
-          setScore((prev) => prev + 1);
+          setScore((prev) => prev + 10);
           if (pellets.length <= 0) {
             // game won
             setTimeout(() => {
               cancelAnimationFrame(animationId);
             }, 100);
           }
+          // disable ghosts
           if (pellet.radius === Pellet.PowerUpRadius) {
             ghosts.forEach((ghost) => {
+              setScore((prev) => prev + 40);
               ghost.scared = true;
               setTimeout(function () {
                 ghost.scared = false;
