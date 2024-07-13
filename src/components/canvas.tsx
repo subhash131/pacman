@@ -335,6 +335,20 @@ const Canvas = () => {
         color: "#06FCFF",
       })
     );
+    ghosts.push(
+      new Ghost({
+        canvasContext: context,
+        position: {
+          x: Boundary.WIDTH * 8 + Boundary.WIDTH / 2,
+          y: Boundary.HEIGHT * 11 + Boundary.HEIGHT / 2,
+        },
+        velocity: {
+          x: Ghost.speed,
+          y: 0,
+        },
+        color: "red",
+      })
+    );
 
     // draw
     let animationId: number;
