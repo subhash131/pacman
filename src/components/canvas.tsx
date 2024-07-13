@@ -65,8 +65,8 @@ const Canvas = () => {
   }
   useEffect(() => {
     if (!canvasRef.current) return;
-    canvasRef.current.width = 440;
-    canvasRef.current.height = innerHeight - 100;
+    canvasRef.current.width = map[0].length * 40;
+    canvasRef.current.height = map.length * 40;
     canvasRef.current.style.backgroundColor = "black";
     context = canvasRef.current.getContext("2d");
     if (!context) return;
@@ -632,6 +632,7 @@ const Canvas = () => {
       ghosts.length = 0;
       player = null;
       context = null;
+      setScore(0);
     };
   }, []);
 
@@ -697,11 +698,14 @@ const Canvas = () => {
   }, []);
 
   return (
-    <section className="bg-black text-start w-full h-full flex items-center justify-center flex-col">
-      <div className="w-[440px] h-fit flex items-center">
-        <p className="text-white">Score: {score}</p>
+    <section className="text-white bg-black text-start w-full h-full flex items-center justify-center flex-col">
+      <div className="flex w-[440px] items-center">
+        <p>Score: {score}</p>
       </div>
-      <canvas ref={canvasRef} />
+      <canvas ref={canvasRef} className="w-[440px] h-[520px] " />
+      <div>
+        <button className="p-2 bg-white text-black rounded-lg">connect</button>
+      </div>
     </section>
   );
 };
