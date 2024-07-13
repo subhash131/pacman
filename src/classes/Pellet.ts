@@ -7,6 +7,7 @@ type PelletsConstructor = {
 };
 
 export class Pellet {
+  public static readonly PowerUpRadius: number = 8;
   position: Position;
   canvasContext: CanvasRenderingContext2D;
   radius: number;

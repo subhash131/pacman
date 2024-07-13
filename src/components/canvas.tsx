@@ -48,7 +48,7 @@ const Canvas = () => {
     boundary,
     player,
   }: {
-    player: Player;
+    player: Player | Ghost;
     boundary: Boundary;
   }): boolean {
     const padding = Boundary.WIDTH / 2 - player.radius - 1;
@@ -282,7 +282,7 @@ const Canvas = () => {
             if (!context) return;
             pellets.push(
               new Pellet({
-                radius: 10,
+                radius: Pellet.PowerUpRadius,
                 canvasContext: context,
                 position: {
                   x: j * Boundary.WIDTH + Boundary.WIDTH / 2,
@@ -456,7 +456,7 @@ const Canvas = () => {
               cancelAnimationFrame(animationId);
             }, 100);
           }
-          if (pellet.radius === 10) {
+          if (pellet.radius === Pellet.PowerUpRadius) {
             ghosts.forEach((ghost) => {
               ghost.scared = true;
               setTimeout(function () {
