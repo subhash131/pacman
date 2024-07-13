@@ -318,7 +318,7 @@ const Canvas = () => {
           x: Ghost.speed,
           y: 0,
         },
-        color: "red",
+        color: "pink",
       })
     );
     ghosts.push(
@@ -332,7 +332,7 @@ const Canvas = () => {
           x: Ghost.speed,
           y: 0,
         },
-        color: "pink",
+        color: "#06FCFF",
       })
     );
 
