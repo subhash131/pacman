@@ -495,7 +495,9 @@ const Canvas = () => {
           ghost.radius + player.radius
         ) {
           if (ghost.scared) {
+            // kill ghost
             ghosts.splice(idx, 1);
+            setScore((prev) => prev + 100);
           } else {
             // Game lost
             cancelAnimationFrame(animationId);
