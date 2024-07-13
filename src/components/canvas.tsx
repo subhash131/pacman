@@ -65,7 +65,7 @@ const Canvas = () => {
   }
   useEffect(() => {
     if (!canvasRef.current) return;
-    canvasRef.current.width = 600;
+    canvasRef.current.width = 440;
     canvasRef.current.height = innerHeight - 100;
     canvasRef.current.style.backgroundColor = "black";
     context = canvasRef.current.getContext("2d");
@@ -698,7 +698,7 @@ const Canvas = () => {
 
   return (
     <section className="bg-black text-start w-full h-full flex items-center justify-center flex-col">
-      <div className="w-[41%] h-fit flex items-center">
+      <div className="w-[440px] h-fit flex items-center">
         <p className="text-white">Score: {score}</p>
       </div>
       <canvas ref={canvasRef} />
