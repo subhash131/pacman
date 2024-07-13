@@ -35,7 +35,7 @@ export class Player {
   draw() {
     this.canvasContext.save();
     this.canvasContext.translate(this.position.x, this.position.y);
-    this.canvasContext.rotate(Math.PI);
+    this.canvasContext.rotate(this.rotation);
     this.canvasContext.translate(-this.position.x, -this.position.y);
 
     this.canvasContext.beginPath();
