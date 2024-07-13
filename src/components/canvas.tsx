@@ -703,9 +703,6 @@ const Canvas = () => {
         <p>Score: {score}</p>
       </div>
       <canvas ref={canvasRef} className="w-[440px] h-[520px] " />
-      <div>
-        <button className="p-2 bg-white text-black rounded-lg">connect</button>
-      </div>
     </section>
   );
 };
