@@ -1,17 +1,13 @@
 "use client";
 import Canvas from "@/components/canvas";
 import { Profile } from "@/components/web3/demo";
-import { Suspense } from "react";
 
 export default function Home() {
   return (
-    <main className="w-screen h-screen">
+    <main className="w-screen h-screen overflow-hidden">
       <Canvas />
-      <Suspense fallback={"loading..."}>
+      <div className="absolute left-0 top-0 size-full">
         <Profile />
-      </Suspense>
-      <div className="absolute top-0 left-0 size-full">
-        <button className="p-2 bg-white text-black rounded-lg">connect</button>
       </div>
     </main>
   );
