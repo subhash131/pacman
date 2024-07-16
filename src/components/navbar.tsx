@@ -37,6 +37,7 @@ export function Navbar() {
           height={10}
           alt="icon"
           className="size-7"
+          draggable={false}
         />
         <h1>BetX</h1>
       </div>
