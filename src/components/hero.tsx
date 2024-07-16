@@ -26,7 +26,7 @@ const Hero = () => {
         />
       </div>
       <div className="absolute top-20 gap-2 right-44 flex flex-col items-center justify-center">
-        <p className="text-xl font-bold drop-shadow-2xl lowercase bg-[#F1EDFE] text-[#5F01FF] rounded-lg p-4 -rotate-3 ">
+        <p className="text-xl font-bold drop-shadow-2xl lowercase bg-[#F1EDFE] text-[#5F01FF] rounded-lg p-4 -rotate-6 ">
           2. Play game
         </p>
         <Image
@@ -37,7 +37,7 @@ const Hero = () => {
           className="size-32 rotate-90"
         />
       </div>
-      <div className="absolute bottom-28 gap-2 left-60 flex flex-col items-center justify-center">
+      <div className="absolute bottom-36 gap-2 left-60 flex flex-col items-center justify-center">
         <Image
           src="/arrow.svg"
           alt="arrow"
@@ -50,7 +50,7 @@ const Hero = () => {
         </p>
       </div>
       <h3 className="text-4xl font-bold w-[60%] ">Win Faster with BetX</h3>
-      <h3 className="text-6xl text-[#5F01FF] drop-shadow-lg font-bold -rotate-1 w-[60%] tracking-wide bg-[#F1EDFE] py-3 rounded-2xl ">
+      <h3 className="text-6xl text-[#5F01FF] drop-shadow-lg font-bold -rotate-2 w-[60%] tracking-wide bg-[#F1EDFE] py-3 rounded-2xl ">
         Bet Smart. Bet Secure.
       </h3>
       <h3 className="text-3xl font-bold w-[60%] ">

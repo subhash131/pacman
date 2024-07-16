@@ -1,24 +1,32 @@
 "use client";
 import { config } from "@/providers/config";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useAccount, useChainId, useWriteContract } from "wagmi";
 import { parseAbi } from "viem";
 
 import abi from "../abi/abi.json";
 import { useMetamaskConnector } from "./useMetamaskConnector";
 import { toast } from "sonner";
+import { useStateContext } from "@/providers/state-provider";
 
 const BetButton = () => {
   const chainId = useChainId();
   const { isConnected: isWalletConnected } = useAccount();
   const { connect, metaMaskConnector } = useMetamaskConnector();
+  const [betClicked, setBetClicked] = useState(false);
+  const { betCardActive, setBetCardActive } = useStateContext();
 
   const { writeContract } = useWriteContract({ config });
   const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
 
-  const handleBetNow = () => {
-    console.log("🚀 ~ BetButton ~ metaMaskConnector:", metaMaskConnector);
+  useEffect(() => {
+    if (isWalletConnected) {
+      console.log("🚀 ~ useEffect ~ isWalletConnected:", isWalletConnected);
+      setBetCardActive(true);
+    }
+  }, [isWalletConnected, betClicked]);
 
+  const handleBetNow = () => {
     if (!metaMaskConnector) {
       toast.error("Metamask not found!");
       return;
@@ -27,15 +35,16 @@ const BetButton = () => {
     if (!isWalletConnected) {
       connect({ connector: metaMaskConnector, chainId });
     }
-    writeContract({
-      abi: parseAbi(["function placeBet()"]),
-      address: contractAddress
-        ? `0x${contractAddress}`
-        : "0xAD0184027c0abAB6f4A0B853B5D36B01fD79a0D2",
-      functionName: "placeBet",
-      // @ts-ignore
-      value: 1,
-    });
+    setBetClicked((prev) => !prev);
+    // writeContract({
+    //   abi: parseAbi(["function placeBet()"]),
+    //   address: contractAddress
+    //     ? `0x${contractAddress}`
+    //     : "0xAD0184027c0abAB6f4A0B853B5D36B01fD79a0D2",
+    //   functionName: "placeBet",
+    //   // @ts-ignore
+    //   value: 1,
+    // });
   };
   return (
     <button
