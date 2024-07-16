@@ -1,6 +1,6 @@
 "use client";
 import Hero from "@/components/hero";
-import { Navbar } from "@/components/web3/navbar";
+import { Navbar } from "@/components/navbar";
 
 export default function Home() {
   return (

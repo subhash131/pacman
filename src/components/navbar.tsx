@@ -6,10 +6,10 @@ import { useReadContract } from "wagmi";
 import { IoIosLogOut } from "react-icons/io";
 
 import { config } from "@/providers/config";
-import abi from "../../abi/abi.json";
+import abi from "../abi/abi.json";
 import Image from "next/image";
 
-const Connect = dynamic(() => import("./connect").then((res) => res.Connect));
+const Connect = dynamic(() => import("./wallet-connect").then((res) => res.Connect));
 
 const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
 export function Navbar() {
@@ -33,7 +33,7 @@ export function Navbar() {
           width={10}
           height={10}
           alt="icon"
-          className="size-5"
+          className="size-7"
         />
         <h1>BetX</h1>
       </div>
