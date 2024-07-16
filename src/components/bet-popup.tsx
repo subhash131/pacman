@@ -1,17 +1,48 @@
 "use client";
 import { useStateContext } from "@/providers/state-provider";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { IoIosInformationCircleOutline } from "react-icons/io";
 import Link from "next/link";
 import { toast } from "sonner";
+import { useWriteContract } from "wagmi";
+import { parseAbi } from "viem";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+
+import { config } from "@/providers/config";
+import { useRouter } from "next/navigation";
 
 const BetPopup = () => {
+  const router = useRouter();
   const { betCardActive, setBetCardActive, walletBalance } = useStateContext();
   const [betAmount, setBetAmount] = useState("100");
+  const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
+
+  const { writeContract, isError, isPending, isSuccess, status, reset } =
+    useWriteContract({ config });
+
+  useEffect(() => {
+    if (isError) {
+      toast.error("Error occurred! please try again");
+      reset();
+    }
+  }, [isError]);
+
+  useEffect(() => {
+    if (isSuccess) router.push("/game");
+  }, [isSuccess]);
 
   const handlePlaceBet = () => {
     if (!betAmount) toast.error("Enter a valid bet amount");
+    writeContract({
+      abi: parseAbi(["function placeBet()"]),
+      address: contractAddress
+        ? `0x${contractAddress}`
+        : "0xAD0184027c0abAB6f4A0B853B5D36B01fD79a0D2",
+      functionName: "placeBet",
+      // @ts-ignore
+      value: betAmount,
+    });
   };
   return (
     <div
@@ -74,10 +105,15 @@ const BetPopup = () => {
             </span>
           </div>
           <button
-            className="bg-white py-2 text-black font-semibold px-10 rounded-lg"
+            className="bg-white transition-transform hover:scale-105 py-2 text-black font-semibold px-10 rounded-lg disabled:bg-neutral-100 disabled:cursor-not-allowed disabled:scale-100"
             onClick={handlePlaceBet}
+            disabled={isSuccess || isPending}
           >
-            Bet
+            {isPending && (
+              <AiOutlineLoading3Quarters className="animate-spin" />
+            )}
+            {!isPending && !isSuccess && !isError && "Bet"}
+            {isSuccess && "loading game..."}
           </button>
         </div>
       </div>
