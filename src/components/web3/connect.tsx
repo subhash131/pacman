@@ -35,7 +35,7 @@ export function Connect() {
           target="_blank"
           className="p-2 text-sm font-medium bg-neutral-700 rounded-lg text-white flex gap-1 items-center justify-center"
         >
-          Add Metamask
+          Install Metamask
         </Link>
       )}
     </div>
