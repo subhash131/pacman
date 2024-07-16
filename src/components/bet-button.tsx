@@ -1,7 +1,8 @@
 "use client";
 import { config } from "@/providers/config";
-import React, { useEffect } from "react";
+import React from "react";
 import { useAccount, useChainId, useWriteContract, Connector } from "wagmi";
+import { parseAbi } from "viem";
 
 import abi from "../abi/abi.json";
 import { useMetamaskConnector } from "./useMetamaskConnector";
@@ -12,46 +13,32 @@ const BetButton = () => {
   const { address, isConnected: isWalletConnected, connector } = useAccount();
   const { connect, metaMaskConnector } = useMetamaskConnector();
 
-  const [ready, setReady] = React.useState(false);
-  useEffect(() => {
-    if (!metaMaskConnector) return;
-    (async () => {
-      const provider = await metaMaskConnector.getProvider();
-      setReady(!!provider);
-    })();
-  }, [metaMaskConnector, setReady]);
-
-  const { writeContract } = useWriteContract();
+  const { writeContract } = useWriteContract({ config });
   const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
 
   const handleBetNow = () => {
-    if (!ready) {
-      toast.error("Metamask is loading");
-      return;
-    }
+    console.log("🚀 ~ BetButton ~ metaMaskConnector:", metaMaskConnector);
+
     if (!metaMaskConnector) {
       toast.error("Metamask not found!");
       return;
     }
+
     if (!isWalletConnected) {
       connect({ connector: metaMaskConnector, chainId });
     }
-    const res = writeContract({
-      abi,
-      address: contractAddress
-        ? `0x${contractAddress}`
-        : "0xAD0184027c0abAB6f4A0B853B5D36B01fD79a0D2",
+    writeContract({
+      abi: parseAbi(["function placeBet()"]),
+      address: "0xAD0184027c0abAB6f4A0B853B5D36B01fD79a0D2",
       functionName: "placeBet",
-      args: [1],
+      // @ts-ignore
+      value: 1,
     });
-
-    console.log("🚀 ~ handleBetNow ~ res:", res);
   };
   return (
     <button
-      className="px-6 hover:scale-105 active:scale-95 transition-all py-2 bg-white rounded-xl text-black font-semibold mt-10"
+      className={`px-6 hover:scale-105 active:scale-95 transition-all py-2 bg-white rounded-xl text-black font-semibold mt-10 disabled:bg-neutral-500`}
       onClick={handleBetNow}
-      disabled={ready}
     >
       Bet now
     </button>

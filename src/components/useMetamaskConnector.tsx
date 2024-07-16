@@ -15,7 +15,7 @@ const useMetamaskConnector = () => {
         setMetaMaskConnector(connector);
       }
     });
-  }, []);
+  }, [connectors]);
   return { metaMaskConnector, connect };
 };
 
