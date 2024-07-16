@@ -1,35 +1,24 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import { Connector, useChainId, useConnect } from "wagmi";
+import React from "react";
+import { Connector, useChainId } from "wagmi";
+import { useMetamaskConnector } from "./useMetamaskConnector";
 
 export function Connect() {
   const chainId = useChainId();
-  const { connectors, connect } = useConnect();
-  const [filteredConnector, setFilteredConnector] = useState<Connector>();
-
-  useEffect(() => {
-    connectors.forEach((connector) => {
-      if (
-        connector.type === "injected" &&
-        connector.name.toLowerCase() === "metamask"
-      ) {
-        setFilteredConnector(connector);
-      }
-    });
-  }, []);
+  const { connect, metaMaskConnector } = useMetamaskConnector();
 
   return (
     <div className="flex gap-4">
-      {filteredConnector && (
+      {metaMaskConnector && (
         <ConnectorButton
-          icon={filteredConnector.icon}
-          connector={filteredConnector}
-          onClick={() => connect({ connector: filteredConnector, chainId })}
+          icon={metaMaskConnector.icon}
+          connector={metaMaskConnector}
+          onClick={() => connect({ connector: metaMaskConnector, chainId })}
         />
       )}
-      {!filteredConnector && (
+      {!metaMaskConnector && (
         <Link
           href="https://metamask.io/download/"
           target="_blank"

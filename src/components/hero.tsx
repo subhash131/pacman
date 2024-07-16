@@ -1,6 +1,7 @@
 import { Poppins } from "next/font/google";
 import Image from "next/image";
 import React from "react";
+import BetButton from "./bet-button";
 
 const poppins = Poppins({
   weight: ["400"],
@@ -18,8 +19,6 @@ const Hero = () => {
         </p>
         <Image
           src="/arrow.svg"
-          items-center
-          justify-center
           alt="arrow"
           width={10}
           height={10}
@@ -32,8 +31,6 @@ const Hero = () => {
         </p>
         <Image
           src="/arrow.svg"
-          items-center
-          justify-center
           alt="arrow"
           width={10}
           height={10}
@@ -43,8 +40,6 @@ const Hero = () => {
       <div className="absolute bottom-28 gap-2 left-60 flex flex-col items-center justify-center">
         <Image
           src="/arrow.svg"
-          items-center
-          justify-center
           alt="arrow"
           width={10}
           height={10}
@@ -61,9 +56,7 @@ const Hero = () => {
       <h3 className="text-3xl font-bold w-[60%] ">
         Instant and Fair Betting with BetX!
       </h3>
-      <button className="px-6 hover:scale-105 active:scale-95 transition-all py-2 bg-white rounded-xl text-black font-semibold mt-10">
-        Play now
-      </button>
+      <BetButton />
     </div>
   );
 };

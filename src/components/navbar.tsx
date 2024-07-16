@@ -9,11 +9,14 @@ import { config } from "@/providers/config";
 import abi from "../abi/abi.json";
 import Image from "next/image";
 
-const Connect = dynamic(() => import("./wallet-connect").then((res) => res.Connect));
+const Connect = dynamic(() =>
+  import("./wallet-connect").then((res) => res.Connect)
+);
 
 const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
 export function Navbar() {
   const { address, isConnected, connector } = useAccount();
+  console.log("🚀 ~ Navbar ~ connector:", connector);
   const { data: balance } = useBalance({ address });
 
   // const { data, error, isError } = useReadContract({
