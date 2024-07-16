@@ -1,28 +1,43 @@
 "use client";
 import Image from "next/image";
-import React from "react";
+import Link from "next/link";
+import React, { useEffect, useState } from "react";
 import { Connector, useChainId, useConnect } from "wagmi";
 
 export function Connect() {
   const chainId = useChainId();
-  const { connectors, connect, isPending } = useConnect();
+  const { connectors, connect } = useConnect();
+  const [filteredConnector, setFilteredConnector] = useState<Connector>();
+
+  useEffect(() => {
+    connectors.forEach((connector) => {
+      if (
+        connector.type === "injected" &&
+        connector.name.toLowerCase() === "metamask"
+      ) {
+        setFilteredConnector(connector);
+      }
+    });
+  }, []);
 
   return (
     <div className="flex gap-4">
-      {!isPending &&
-        connectors.map((connector) => {
-          return (
-            <div key={connector.uid}>
-              {connector.type === "injected" && (
-                <ConnectorButton
-                  icon={connector.icon}
-                  connector={connector}
-                  onClick={() => connect({ connector, chainId })}
-                />
-              )}
-            </div>
-          );
-        })}
+      {filteredConnector && (
+        <ConnectorButton
+          icon={filteredConnector.icon}
+          connector={filteredConnector}
+          onClick={() => connect({ connector: filteredConnector, chainId })}
+        />
+      )}
+      {!filteredConnector && (
+        <Link
+          href="https://metamask.io/download/"
+          target="_blank"
+          className="p-2 text-sm font-medium bg-neutral-700 rounded-lg text-white flex gap-1 items-center justify-center"
+        >
+          Add Metamask
+        </Link>
+      )}
     </div>
   );
 }
@@ -46,7 +61,7 @@ function ConnectorButton({
 
   return (
     <button
-      className="p-2 bg-black rounded-lg text-white flex gap-2 items-center justify-center"
+      className="p-2 text-sm font-medium bg-neutral-700 rounded-lg text-white flex gap-1 items-center justify-center"
       disabled={!ready}
       onClick={onClick}
       type="button"

@@ -1,10 +1,10 @@
 "use client";
-import { Profile } from "@/components/web3/demo";
+import { Navbar } from "@/components/web3/navbar";
 
 export default function Home() {
   return (
-    <main className="w-screen h-screen overflow-hidden">
-      <Profile />
+    <main className="w-screen h-screen overflow-hidden bg-black">
+      <Navbar />
     </main>
   );
 }
