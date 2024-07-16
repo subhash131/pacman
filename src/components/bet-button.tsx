@@ -21,7 +21,6 @@ const BetButton = () => {
 
   useEffect(() => {
     if (isWalletConnected) {
-      console.log("🚀 ~ useEffect ~ isWalletConnected:", isWalletConnected);
       setBetCardActive(true);
     }
   }, [isWalletConnected, betClicked]);
