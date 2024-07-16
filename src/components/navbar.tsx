@@ -1,6 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
-import React from "react";
+import React, { useEffect } from "react";
 import { useAccount, useBalance } from "wagmi";
 import { useReadContract } from "wagmi";
 import { IoIosLogOut } from "react-icons/io";
@@ -8,6 +8,7 @@ import { IoIosLogOut } from "react-icons/io";
 import { config } from "@/providers/config";
 import abi from "../abi/abi.json";
 import Image from "next/image";
+import { useStateContext } from "@/providers/state-provider";
 
 const Connect = dynamic(() =>
   import("./wallet-connect").then((res) => res.Connect)
@@ -16,8 +17,12 @@ const Connect = dynamic(() =>
 const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
 export function Navbar() {
   const { address, isConnected, connector } = useAccount();
+  const { setWalletBalance } = useStateContext();
   console.log("🚀 ~ Navbar ~ connector:", connector);
   const { data: balance } = useBalance({ address });
+  useEffect(() => {
+    if (balance && balance.formatted) setWalletBalance(balance.formatted);
+  }, [balance]);
 
   // const { data, error, isError } = useReadContract({
   //   abi,
