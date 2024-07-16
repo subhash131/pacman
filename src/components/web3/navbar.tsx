@@ -7,6 +7,7 @@ import { IoIosLogOut } from "react-icons/io";
 
 import { config } from "@/providers/config";
 import abi from "../../abi/abi.json";
+import Image from "next/image";
 
 const Connect = dynamic(() => import("./connect").then((res) => res.Connect));
 
@@ -26,7 +27,14 @@ export function Navbar() {
 
   return (
     <div className="w-screen h-fit p-4 flex px-10 justify-between">
-      <div className="text-white font-bold text-xl">
+      <div className="text-white font-bold text-xl flex gap-2 items-center jc">
+        <Image
+          src="/icon.png"
+          width={10}
+          height={10}
+          alt="icon"
+          className="size-5"
+        />
         <h1>BetX</h1>
       </div>
       {!isConnected ? (
