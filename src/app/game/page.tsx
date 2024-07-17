@@ -27,7 +27,7 @@ const GamePage = () => {
   const contract = new ethers.Contract(contractAddress, abi, wallet);
   console.log("🚀 ~ GamePage ~ contract:", contract);
   const updateResult = async () => {
-    const tx = await contract.endGame(address, BigInt(2), gameStatus === "won");
+    const tx = await contract.endGame(address, BigInt(0), gameStatus === "won");
     await tx.wait();
     console.log("Transaction successful:", tx.hash);
   };
