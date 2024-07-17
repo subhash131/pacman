@@ -28,15 +28,6 @@ export function Navbar() {
     if (balance && balance.formatted) setWalletBalance(balance.formatted);
   }, [balance]);
 
-  // const { data, error, isError } = useReadContract({
-  //   abi,
-  //   address:
-  //     (contractAddress && `0x${contractAddress}`) ||
-  //     "0xAD0184027c0abAB6f4A0B853B5D36B01fD79a0D2",
-  //   functionName: "gameOwner",
-  //   config,
-  // });
-
   return (
     <div className="w-screen h-fit p-4 flex px-10 justify-between">
       <div className="text-white font-bold text-xl flex gap-2 items-center jc">
