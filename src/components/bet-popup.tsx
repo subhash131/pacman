@@ -18,7 +18,7 @@ const BetPopup = () => {
   const [betAmount, setBetAmount] = useState("100");
   const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
 
-  const { writeContract, isError, isPending, isSuccess, status, reset } =
+  const { writeContract, isError, isPending, isSuccess, reset } =
     useWriteContract({ config });
 
   useEffect(() => {
@@ -33,7 +33,14 @@ const BetPopup = () => {
   }, [isSuccess]);
 
   const handlePlaceBet = () => {
-    if (!betAmount) toast.error("Enter a valid bet amount");
+    if (!betAmount) {
+      toast.error("Enter a valid bet amount");
+      return;
+    }
+    if (Number(walletBalance) * 10 ** 18 < Number(betAmount)) {
+      toast.error("Low wallet balance please add faucets!!");
+      return;
+    }
     writeContract({
       abi: parseAbi(["function placeBet()"]),
       address: contractAddress
@@ -66,7 +73,7 @@ const BetPopup = () => {
           </button>
         </div>
         <div className="w-full h-[calc(100%-3rem)] p-4 flex flex-col items-center">
-          <div className="flex gap-2 mt-6 items-start text-sm w-full">
+          <div className="flex gap-2 items-start text-sm w-full">
             <label className="text-nowrap">Bet Amount: </label>
             <input
               className="bg-transparent outline-none border-b w-full"
@@ -76,15 +83,28 @@ const BetPopup = () => {
               min={0}
               onChange={(e) => {
                 if (!e.target.value) setBetAmount("");
+                if (Number(e.target.value) < 1) {
+                  e.preventDefault();
+                  toast.error("Minium limit is 1 wei");
+                  return;
+                }
                 if (Number(e.target.value) > 500000) {
                   e.preventDefault();
-                  toast.error("Max limit is 500,000");
+                  toast.error("Maximum limit is 500,000");
                   return;
                 }
                 if (e.target.value) setBetAmount(e.target.value);
               }}
               autoFocus={betCardActive}
               value={betAmount}
+            />
+          </div>
+          <div className="flex gap-2 mt-6 items-start text-sm w-full">
+            <label className="text-nowrap">If you win, you will receive </label>
+            <input
+              className="bg-transparent outline-none w-full"
+              disabled
+              value={`${Number(betAmount) * 2} wei`}
             />
           </div>
           <div className="w-full flex justify-center items-center text-center h-full text-xs text-red-500 font-semibold gap-1 flex-col">
@@ -112,7 +132,7 @@ const BetPopup = () => {
             {isPending && (
               <AiOutlineLoading3Quarters className="animate-spin" />
             )}
-            {!isPending && !isSuccess && !isError && "Bet"}
+            {!isPending && !isSuccess && !isError && "Confirm"}
             {isSuccess && "loading game..."}
           </button>
         </div>

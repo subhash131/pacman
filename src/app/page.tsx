@@ -1,4 +1,3 @@
-"use client";
 import BetPopup from "@/components/bet-popup";
 import Hero from "@/components/hero";
 import { Navbar } from "@/components/navbar";

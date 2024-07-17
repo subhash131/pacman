@@ -17,9 +17,13 @@ const Connect = dynamic(() =>
 const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
 export function Navbar() {
   const { address, isConnected, connector } = useAccount();
-  const { setWalletBalance } = useStateContext();
-  console.log("🚀 ~ Navbar ~ connector:", connector);
+  const { setWalletBalance, setBetCardActive } = useStateContext();
   const { data: balance } = useBalance({ address });
+
+  useEffect(() => {
+    if (!isConnected) setBetCardActive(false);
+  }, [isConnected]);
+
   useEffect(() => {
     if (balance && balance.formatted) setWalletBalance(balance.formatted);
   }, [balance]);

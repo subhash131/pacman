@@ -4,12 +4,14 @@ import { Ghost } from "@/classes/Ghost";
 import { Pellet } from "@/classes/Pellet";
 import { Player } from "@/classes/Player";
 import { map } from "@/constants";
+import { useStateContext } from "@/providers/state-provider";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
 const imageCache: { [key: string]: HTMLImageElement } = {};
 
 const Canvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { setGameStatus } = useStateContext();
   let context: CanvasRenderingContext2D | null;
   const [score, setScore] = useState(0);
 
@@ -467,6 +469,7 @@ const Canvas = () => {
           if (pellets.length <= 0) {
             // game won
             setTimeout(() => {
+              setGameStatus("won");
               cancelAnimationFrame(animationId);
             }, 100);
           }
@@ -500,6 +503,7 @@ const Canvas = () => {
             setScore((prev) => prev + 100);
           } else {
             // Game lost
+            setGameStatus("lost");
             cancelAnimationFrame(animationId);
           }
         }
