@@ -16,10 +16,7 @@ const GamePage = () => {
   const privateKey = process.env.NEXT_PUBLIC_OWNER_PRIVATE_KEY;
 
   const provider = new ethers.JsonRpcProvider(rpcUrl);
-  const wallet = new ethers.Wallet(
-    "701c094401e5dae0530605656dd3d9bd80e867295447f7a727fafa8c96041887",
-    provider
-  );
+  const wallet = new ethers.Wallet(privateKey!, provider);
   const contractAddress =
     `0x${process.env.NEXT_PUBLIC_CONTRACT_ADDRESS}` ||
     "0xF5b73d19d8F4147f0aa177f452bC57A755B5Fd62";
@@ -27,7 +24,7 @@ const GamePage = () => {
   const contract = new ethers.Contract(contractAddress, abi, wallet);
   console.log("🚀 ~ GamePage ~ contract:", contract);
   const updateResult = async () => {
-    const tx = await contract.endGame(address, BigInt(0), gameStatus === "won");
+    const tx = await contract.endGame(address, gameStatus === "won");
     await tx.wait();
     console.log("Transaction successful:", tx.hash);
   };
