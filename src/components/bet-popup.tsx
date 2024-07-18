@@ -21,6 +21,8 @@ const BetPopup = () => {
     walletBalance,
     setLastTransaction,
     lastTransaction,
+    provider,
+    setGameStatus,
   } = useStateContext();
   const [betAmount, setBetAmount] = useState("100");
   const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
@@ -34,19 +36,24 @@ const BetPopup = () => {
     data: hash,
   } = useWriteContract({ config });
 
+  console.log("🚀 ~ BetPopup ~ hash:", hash);
+
   const { isSuccess: txSuccess } = useWaitForTransactionReceipt({
     hash,
     config,
     retryCount: 30,
-    chainId: sepolia.id,
   });
 
+  console.log("🚀 ~ BetPopup ~ txSuccess:", txSuccess);
+
   useEffect(() => {
-    if (txSuccess) {
+    if (isSuccess) {
+      setGameStatus("playing");
       setLastTransaction({ confirmed: true, hash });
       router.push("/game");
+      reset();
     }
-  }, [txSuccess]);
+  }, [isSuccess]);
 
   useEffect(() => {
     if (isError) {
@@ -54,10 +61,6 @@ const BetPopup = () => {
       reset();
     }
   }, [isError]);
-
-  useEffect(() => {
-    if (lastTransaction.confirmed) router.push("/game");
-  }, [lastTransaction.confirmed]);
 
   const handlePlaceBet = () => {
     if (!betAmount) {
@@ -160,8 +163,8 @@ const BetPopup = () => {
               <AiOutlineLoading3Quarters className="animate-spin" />
             )}
             {!isPending && !isSuccess && !isError && "Confirm"}
-            {isSuccess && !txSuccess && "confirmation pending..."}
-            {txSuccess && "Loading Game..."}
+            {/* {isSuccess && !txSuccess && "confirmation pending..."} */}
+            {isSuccess && "Loading Game..."}
           </button>
         </div>
       </div>

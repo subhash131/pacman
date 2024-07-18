@@ -18,6 +18,7 @@ const poppins = Poppins({
 
 const GamePage = () => {
   const { gameStatus, provider, setGameStatus } = useStateContext();
+  console.log("🚀 ~ GamePage ~ gameStatus:", gameStatus);
   const { address } = useAccount();
   const router = useRouter();
   const privateKey = process.env.NEXT_PUBLIC_OWNER_PRIVATE_KEY;
@@ -75,10 +76,6 @@ const GamePage = () => {
       return;
     }
     if (gameStatus !== "playing") updateResult();
-
-    return () => {
-      setGameStatus("playing");
-    };
   }, [gameStatus]);
 
   return (
