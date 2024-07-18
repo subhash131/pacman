@@ -18,7 +18,6 @@ const BetPopup = () => {
     betCardActive,
     setBetCardActive,
     walletBalance,
-    provider,
     setLastTransaction,
     lastTransaction,
   } = useStateContext();
@@ -111,12 +110,12 @@ const BetPopup = () => {
                 if (!e.target.value) setBetAmount("");
                 if (Number(e.target.value) < 1) {
                   e.preventDefault();
-                  toast.error("Minium limit is 1 wei");
+                  toast.error("The minimum limit is 1 wei.");
                   return;
                 }
                 if (Number(e.target.value) > 500000) {
                   e.preventDefault();
-                  toast.error("Maximum limit is 500,000");
+                  toast.error("The maximum limit is 500,000");
                   return;
                 }
                 if (e.target.value) setBetAmount(e.target.value);
