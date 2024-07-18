@@ -39,7 +39,7 @@ const GamePage = () => {
   const wallet = new ethers.Wallet(privateKey!, provider);
   const contractAddress: `0x${string}` =
     `0x${process.env.NEXT_PUBLIC_CONTRACT_ADDRESS}` ||
-    "0x29bcb51A93ED4b01fA6885694ee622Bf061e4E14";
+    "0x9099eb82663B18db28906F592ff834c28be40699";
 
   const contract = new ethers.Contract(contractAddress, abi, wallet);
   const updateResult = async () => {
@@ -75,6 +75,10 @@ const GamePage = () => {
       return;
     }
     if (gameStatus !== "playing") updateResult();
+
+    return () => {
+      setGameStatus("playing");
+    };
   }, [gameStatus]);
 
   return (
@@ -104,7 +108,6 @@ const GamePage = () => {
               <button
                 onClick={() => {
                   router.push("/");
-                  setGameStatus("playing");
                 }}
                 className="hover:scale-105 active:scale-95 transition-all text-lg px-4 py-2 rounded-lg bg-white text-black"
               >

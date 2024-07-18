@@ -10,6 +10,7 @@ import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { config } from "@/providers/config";
 
+import { sepolia } from "wagmi/chains";
 import { parseAbi } from "viem";
 
 const BetPopup = () => {
@@ -36,7 +37,8 @@ const BetPopup = () => {
   const { isSuccess: txSuccess } = useWaitForTransactionReceipt({
     hash,
     config,
-    retryCount: 10,
+    retryCount: 30,
+    chainId: sepolia.id,
   });
 
   useEffect(() => {
@@ -70,7 +72,7 @@ const BetPopup = () => {
       abi: parseAbi(["function placeBet()"]),
       address: contractAddress
         ? `0x${contractAddress}`
-        : "0x29bcb51A93ED4b01fA6885694ee622Bf061e4E14",
+        : "0x9099eb82663B18db28906F592ff834c28be40699",
       functionName: "placeBet",
       // @ts-ignore
       value: betAmount,

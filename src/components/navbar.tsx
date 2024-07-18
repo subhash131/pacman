@@ -25,7 +25,7 @@ export function Navbar() {
   }, [balance]);
 
   return (
-    <div className="w-screen h-fit p-4 flex px-10 justify-between">
+    <div className="w-screen h-[4.5rem] p-4 flex px-10 justify-between">
       <div className="text-white font-bold text-xl flex gap-2 items-center jc">
         <Image
           src="/icon.png"
