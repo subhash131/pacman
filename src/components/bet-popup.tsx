@@ -33,12 +33,16 @@ const BetPopup = () => {
     reset,
     data: hash,
   } = useWriteContract({ config });
-  const { isSuccess: txSuccess, data } = useWaitForTransactionReceipt({
+
+  const { isSuccess: txSuccess } = useWaitForTransactionReceipt({
     hash,
+    config,
+    retryCount: 10,
   });
 
   useEffect(() => {
     if (txSuccess) {
+      setLastTransaction({ confirmed: true, hash });
       router.push("/game");
     }
   }, [txSuccess]);

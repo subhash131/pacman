@@ -7,10 +7,13 @@ import { useAccount, useConfig } from "wagmi";
 import { ethers } from "ethers";
 import abi from "../../abi/abi.json";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const GamePage = () => {
-  const { gameStatus, provider } = useStateContext();
+  const { gameStatus, provider, lastTransaction } = useStateContext();
   const { address } = useAccount();
+
+  const router = useRouter();
 
   const privateKey = process.env.NEXT_PUBLIC_OWNER_PRIVATE_KEY;
 
@@ -34,10 +37,16 @@ const GamePage = () => {
     }
     if (gameStatus !== "playing") updateResult();
   }, [gameStatus]);
+
   return (
     <div className="w-screen h-screen overflow-hidden relative">
       <Canvas />
       <Help />
+      {!lastTransaction.confirmed && (
+        <div className="w-fit text-2xl font-semibold h-fit flex items-center justify-center bg-black text-white">
+          No bets found...!
+        </div>
+      )}
     </div>
   );
 };
