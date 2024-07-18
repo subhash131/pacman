@@ -5,7 +5,7 @@ import { IoClose } from "react-icons/io5";
 import { IoIosInformationCircleOutline } from "react-icons/io";
 import Link from "next/link";
 import { toast } from "sonner";
-import { useWriteContract } from "wagmi";
+import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { parseAbi } from "viem";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
@@ -14,12 +14,34 @@ import { useRouter } from "next/navigation";
 
 const BetPopup = () => {
   const router = useRouter();
-  const { betCardActive, setBetCardActive, walletBalance } = useStateContext();
+  const {
+    betCardActive,
+    setBetCardActive,
+    walletBalance,
+    provider,
+    setLastTransaction,
+    lastTransaction,
+  } = useStateContext();
   const [betAmount, setBetAmount] = useState("100");
   const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
 
-  const { writeContract, isError, isPending, isSuccess, reset } =
-    useWriteContract({ config });
+  const {
+    writeContract,
+    isError,
+    isPending,
+    isSuccess,
+    reset,
+    data: hash,
+  } = useWriteContract({ config });
+  const { isSuccess: txSuccess, data } = useWaitForTransactionReceipt({
+    hash,
+  });
+
+  useEffect(() => {
+    if (txSuccess) {
+      router.push("/game");
+    }
+  }, [txSuccess]);
 
   useEffect(() => {
     if (isError) {
@@ -29,8 +51,8 @@ const BetPopup = () => {
   }, [isError]);
 
   useEffect(() => {
-    if (isSuccess) router.push("/game");
-  }, [isSuccess]);
+    if (lastTransaction.confirmed) router.push("/game");
+  }, [lastTransaction.confirmed]);
 
   const handlePlaceBet = () => {
     if (!betAmount) {
@@ -58,7 +80,7 @@ const BetPopup = () => {
       } absolute top-0 left-0 size-full flex items-center justify-center transition-all duration-500 backdrop-blur-md`}
     >
       <div
-        className={`z-50 relative bg-neutral-700 text-white px-4 w-[30%] h-[40%] rounded-xl `}
+        className={`z-50 relative bg-neutral-700 text-white px-4 min-w-[30%] h-[40%] w-fit rounded-xl `}
       >
         <div className="w-full h-12 items-center justify-between flex ">
           <p className="text-xs font-semibold">
@@ -133,7 +155,8 @@ const BetPopup = () => {
               <AiOutlineLoading3Quarters className="animate-spin" />
             )}
             {!isPending && !isSuccess && !isError && "Confirm"}
-            {isSuccess && "loading game..."}
+            {isSuccess && !txSuccess && "confirmation pending..."}
+            {txSuccess && "Loading Game..."}
           </button>
         </div>
       </div>

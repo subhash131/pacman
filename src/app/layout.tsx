@@ -20,10 +20,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <StateProvider>
-          <Wagmi>{children}</Wagmi>
-          <Toaster />
-        </StateProvider>
+        <Wagmi>
+          <StateProvider>
+            {children}
+            <Toaster />
+          </StateProvider>
+        </Wagmi>
       </body>
     </html>
   );

@@ -9,13 +9,11 @@ import abi from "../../abi/abi.json";
 import { toast } from "sonner";
 
 const GamePage = () => {
-  const { gameStatus } = useStateContext();
+  const { gameStatus, provider } = useStateContext();
   const { address } = useAccount();
-  const { getClient } = useConfig();
-  const rpcUrl = getClient().chain.rpcUrls.default.http[0];
+
   const privateKey = process.env.NEXT_PUBLIC_OWNER_PRIVATE_KEY;
 
-  const provider = new ethers.JsonRpcProvider(rpcUrl);
   const wallet = new ethers.Wallet(privateKey!, provider);
   const contractAddress =
     `0x${process.env.NEXT_PUBLIC_CONTRACT_ADDRESS}` ||
