@@ -23,8 +23,8 @@ const GamePage = () => {
   const privateKey = process.env.NEXT_PUBLIC_OWNER_PRIVATE_KEY;
 
   const [buttonMsg, setButtonMsg] = useState<
-    "Updating result" | "Claim reward" | "Go Home"
-  >("Updating result");
+    "Updating result..." | "Claim reward" | "Go Home"
+  >("Updating result...");
 
   const [txHash, setTxHash] = useState("");
 
@@ -39,7 +39,7 @@ const GamePage = () => {
   const wallet = new ethers.Wallet(privateKey!, provider);
   const contractAddress: `0x${string}` =
     `0x${process.env.NEXT_PUBLIC_CONTRACT_ADDRESS}` ||
-    "0xd2BBEf5C5d0c631f1D5E49b8e0991AAC8D980c92";
+    "0x29bcb51A93ED4b01fA6885694ee622Bf061e4E14";
 
   const contract = new ethers.Contract(contractAddress, abi, wallet);
   const updateResult = async () => {
@@ -48,6 +48,8 @@ const GamePage = () => {
       await tx.wait();
       setTxHash(tx.hash);
     } catch (e) {
+      console.log("🚀 ~ updateResult ~ e:", e);
+
       toast.error("Something went wrong😶");
     }
   };
@@ -59,6 +61,7 @@ const GamePage = () => {
         await tx.wait();
         setButtonMsg("Go Home");
       } catch (e) {
+        console.log("🚀 ~ claimReward ~ e:", e);
         toast.error("failed to claim reward😕");
       }
     } else if (buttonMsg === "Go Home") {
@@ -89,7 +92,8 @@ const GamePage = () => {
               Congratulations🎉! You win.
               <button
                 onClick={claimReward}
-                className="hover:scale-105 active:scale-95 transition-all text-base px-4 py-2 rounded-lg bg-white text-black"
+                className="hover:scale-105 active:scale-95 transition-all text-base px-4 py-2 rounded-lg bg-white text-black disabled:bg-neutral-300"
+                disabled={buttonMsg === "Updating result..."}
               >
                 {buttonMsg}
               </button>

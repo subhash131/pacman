@@ -70,7 +70,7 @@ const BetPopup = () => {
       abi: parseAbi(["function placeBet()"]),
       address: contractAddress
         ? `0x${contractAddress}`
-        : "0xd2BBEf5C5d0c631f1D5E49b8e0991AAC8D980c92",
+        : "0x29bcb51A93ED4b01fA6885694ee622Bf061e4E14",
       functionName: "placeBet",
       // @ts-ignore
       value: betAmount,
