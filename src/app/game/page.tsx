@@ -3,12 +3,13 @@ import React, { useEffect } from "react";
 import Canvas from "@/components/canvas";
 import Help from "@/components/help";
 import { useStateContext } from "@/providers/state-provider";
-import { useAccount } from "wagmi";
-import { ethers } from "ethers";
+import { useAccount, useWriteContract } from "wagmi";
+import { ethers, isError } from "ethers";
 import abi from "../../abi/abi.json";
 import { toast } from "sonner";
 import { Poppins } from "next/font/google";
 import { useRouter } from "next/navigation";
+import { config } from "@/providers/config";
 
 const poppins = Poppins({
   weight: ["400"],
@@ -21,8 +22,11 @@ const GamePage = () => {
   const router = useRouter();
   const privateKey = process.env.NEXT_PUBLIC_OWNER_PRIVATE_KEY;
 
+  const { writeContract, data, isError, isSuccess, isPending, error } =
+    useWriteContract({ config });
+
   const wallet = new ethers.Wallet(privateKey!, provider);
-  const contractAddress =
+  const contractAddress: `0x${string}` =
     `0x${process.env.NEXT_PUBLIC_CONTRACT_ADDRESS}` ||
     "0xF5b73d19d8F4147f0aa177f452bC57A755B5Fd62";
 
@@ -31,6 +35,16 @@ const GamePage = () => {
     const tx = await contract.endGame(address, gameStatus === "won");
     await tx.wait();
   };
+
+  const claimReward = () => {
+    writeContract({
+      abi,
+      functionName: "claimWinnings",
+      address: contractAddress,
+    });
+  };
+  console.log("🚀 ~ claimReward ~ data:", isError);
+  console.log("🚀 ~ claimReward ~ data:", error);
 
   useEffect(() => {
     if (!privateKey) {
@@ -50,11 +64,17 @@ const GamePage = () => {
         } left-0 backdrop-blur-md transition-all duration-1000 delay-500 flex items-center justify-center`}
       >
         <div className="size-96 rounded-lg bg-neutral-700 text-white">
+          <div
+            onClick={claimReward}
+            className="p-4 bg-white cursor-pointer text-black"
+          >
+            Button
+          </div>
           {gameStatus === "won" ? (
             <div className="size-full gap-8 flex-col flex items-center justify-center font-semibold text-2xl">
               Congratulations🎉! You win.
               <button
-                onClick={() => {}}
+                onClick={claimReward}
                 className="hover:scale-105 active:scale-95 transition-all text-base px-4 py-2 rounded-lg bg-white text-black"
               >
                 Claim reward
