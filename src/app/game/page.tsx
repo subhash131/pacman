@@ -10,10 +10,8 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 const GamePage = () => {
-  const { gameStatus, provider, lastTransaction } = useStateContext();
+  const { gameStatus, provider } = useStateContext();
   const { address } = useAccount();
-
-  const router = useRouter();
 
   const privateKey = process.env.NEXT_PUBLIC_OWNER_PRIVATE_KEY;
 
@@ -42,11 +40,7 @@ const GamePage = () => {
     <div className="w-screen h-screen overflow-hidden relative">
       <Canvas />
       <Help />
-      {!lastTransaction.confirmed && (
-        <div className="w-fit text-2xl font-semibold h-fit flex items-center justify-center bg-black text-white">
-          No bets found...!
-        </div>
-      )}
+      {/* <div className="absolute size-full z-50 top-0 left-0 backdrop-blur-md"></div> */}
     </div>
   );
 };

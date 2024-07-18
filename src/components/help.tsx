@@ -7,7 +7,7 @@ const Help = () => {
   return (
     <div
       className={`absolute w-96 h-44 ${
-        isActive ? "top-0" : "-top-[7rem]"
+        isActive ? "top-0" : "-top-[8rem]"
       }  right-10 rounded-b-xl duration-300 bg-neutral-700 text-white transition-all`}
     >
       <div className="w-full h-[calc(100%-4rem)] px-6 pt-4">
@@ -25,7 +25,7 @@ const Help = () => {
         </ul>
       </div>
       <div
-        className="h-16 w-full flex items-center justify-between px-8 cursor-pointer "
+        className="h-16 mt-2 w-full flex items-center justify-between px-8 cursor-pointer "
         onClick={() => {
           setIsActive((prev) => !prev);
         }}
