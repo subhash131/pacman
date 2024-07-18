@@ -18,6 +18,7 @@ const Help = () => {
           <li>
             Use Arrows(&larr;,&uarr;,&rarr;,&darr;) or A,W,D,S keys to navigate.
           </li>
+          <li>Press spacebar to stop.</li>
           <li>Consume larger pellets to frighten the enemies.</li>
           <li>You can consume enemies when they are frightened.</li>
           <li>Consume all pellets to win the game.</li>
