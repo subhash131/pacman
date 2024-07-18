@@ -1,16 +1,16 @@
 "use client";
-import { useStateContext } from "@/providers/state-provider";
 import React, { useEffect, useState } from "react";
+import { useStateContext } from "@/providers/state-provider";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { IoClose } from "react-icons/io5";
 import { IoIosInformationCircleOutline } from "react-icons/io";
-import Link from "next/link";
 import { toast } from "sonner";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
-import { parseAbi } from "viem";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-
 import { config } from "@/providers/config";
-import { useRouter } from "next/navigation";
+
+import { parseAbi } from "viem";
 
 const BetPopup = () => {
   const router = useRouter();
@@ -70,7 +70,7 @@ const BetPopup = () => {
       abi: parseAbi(["function placeBet()"]),
       address: contractAddress
         ? `0x${contractAddress}`
-        : "0xF5b73d19d8F4147f0aa177f452bC57A755B5Fd62",
+        : "0xd2BBEf5C5d0c631f1D5E49b8e0991AAC8D980c92",
       functionName: "placeBet",
       // @ts-ignore
       value: betAmount,

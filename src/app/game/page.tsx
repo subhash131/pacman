@@ -1,15 +1,15 @@
 "use client";
 import React, { useEffect } from "react";
+import { useStateContext } from "@/providers/state-provider";
 import Canvas from "@/components/canvas";
 import Help from "@/components/help";
-import { useStateContext } from "@/providers/state-provider";
-import { useAccount, useWriteContract } from "wagmi";
-import { ethers, isError } from "ethers";
+import { useRouter } from "next/navigation";
 import abi from "../../abi/abi.json";
 import { toast } from "sonner";
 import { Poppins } from "next/font/google";
-import { useRouter } from "next/navigation";
-import { config } from "@/providers/config";
+
+import { useAccount } from "wagmi";
+import { ethers } from "ethers";
 
 const poppins = Poppins({
   weight: ["400"],
@@ -17,18 +17,16 @@ const poppins = Poppins({
 });
 
 const GamePage = () => {
-  const { gameStatus, provider, setGameStatus } = useStateContext();
+  const { gameStatus, provider, setGameStatus, walletBalance } =
+    useStateContext();
   const { address } = useAccount();
   const router = useRouter();
   const privateKey = process.env.NEXT_PUBLIC_OWNER_PRIVATE_KEY;
 
-  const { writeContract, data, isError, isSuccess, isPending, error } =
-    useWriteContract({ config });
-
   const wallet = new ethers.Wallet(privateKey!, provider);
   const contractAddress: `0x${string}` =
     `0x${process.env.NEXT_PUBLIC_CONTRACT_ADDRESS}` ||
-    "0xF5b73d19d8F4147f0aa177f452bC57A755B5Fd62";
+    "0xd2BBEf5C5d0c631f1D5E49b8e0991AAC8D980c92";
 
   const contract = new ethers.Contract(contractAddress, abi, wallet);
   const updateResult = async () => {
@@ -36,15 +34,10 @@ const GamePage = () => {
     await tx.wait();
   };
 
-  const claimReward = () => {
-    writeContract({
-      abi,
-      functionName: "claimWinnings",
-      address: contractAddress,
-    });
+  const claimReward = async () => {
+    const tx = await contract.claimWinnings(address);
+    await tx.wait();
   };
-  console.log("🚀 ~ claimReward ~ data:", isError);
-  console.log("🚀 ~ claimReward ~ data:", error);
 
   useEffect(() => {
     if (!privateKey) {
@@ -70,6 +63,7 @@ const GamePage = () => {
           >
             Button
           </div>
+          <div>{walletBalance}</div>
           {gameStatus === "won" ? (
             <div className="size-full gap-8 flex-col flex items-center justify-center font-semibold text-2xl">
               Congratulations🎉! You win.
@@ -85,8 +79,8 @@ const GamePage = () => {
               😕Better luck next time.
               <button
                 onClick={() => {
+                  router.push("/");
                   setGameStatus("playing");
-                  router.replace("/");
                 }}
                 className="hover:scale-105 active:scale-95 transition-all text-lg px-4 py-2 rounded-lg bg-white text-black"
               >
