@@ -97,7 +97,7 @@ const GamePage = () => {
               Congratulations🎉! You win.
               <button
                 onClick={claimReward}
-                className="hover:scale-105 active:scale-95 transition-all text-base px-4 py-2 rounded-lg bg-white text-black disabled:bg-neutral-300 disabled:scale-100"
+                className="hover:scale-105 active:scale-95 transition-all text-base px-4 py-2 rounded-lg bg-white text-black disabled:bg-neutral-300 disabled:scale-100 disabled:cursor-not-allowed"
                 disabled={
                   buttonMsg === "Updating result..." || claimRewardLoading
                 }
