@@ -23,6 +23,8 @@ const GamePage = () => {
   const router = useRouter();
   const privateKey = process.env.NEXT_PUBLIC_OWNER_PRIVATE_KEY;
 
+  let [claimRewardLoading, setClaimRewardLoading] = useState(false);
+
   const [buttonMsg, setButtonMsg] = useState<
     "Updating result..." | "Claim reward" | "Go Home"
   >("Updating result...");
@@ -50,7 +52,6 @@ const GamePage = () => {
       setTxHash(tx.hash);
     } catch (e) {
       console.log("🚀 ~ updateResult ~ e:", e);
-
       toast.error("Something went wrong😶");
     }
   };
@@ -58,10 +59,13 @@ const GamePage = () => {
   const claimReward = async () => {
     if (buttonMsg === "Claim reward") {
       try {
+        setClaimRewardLoading(true);
         const tx = await contract.claimWinnings(address);
         await tx.wait();
+        setClaimRewardLoading(false);
         setButtonMsg("Go Home");
       } catch (e) {
+        setClaimRewardLoading(false);
         console.log("🚀 ~ claimReward ~ e:", e);
         toast.error("failed to claim reward😕");
       }
@@ -93,11 +97,16 @@ const GamePage = () => {
               Congratulations🎉! You win.
               <button
                 onClick={claimReward}
-                className="hover:scale-105 active:scale-95 transition-all text-base px-4 py-2 rounded-lg bg-white text-black disabled:bg-neutral-300"
-                disabled={buttonMsg === "Updating result..."}
+                className="hover:scale-105 active:scale-95 transition-all text-base px-4 py-2 rounded-lg bg-white text-black disabled:bg-neutral-300 disabled:scale-100"
+                disabled={
+                  buttonMsg === "Updating result..." || claimRewardLoading
+                }
               >
-                {buttonMsg}
+                {claimRewardLoading ? "loading.." : buttonMsg}
               </button>
+              {buttonMsg === "Go Home" && !claimRewardLoading && (
+                <div>Reward sent...!🎉</div>
+              )}
             </div>
           ) : (
             <div className="size-full gap-4 flex-col flex items-center justify-center font-semibold text-2xl">
