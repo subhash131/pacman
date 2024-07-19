@@ -9,7 +9,9 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 
 const imageCache: { [key: string]: HTMLImageElement } = {};
 
-let timer: NodeJS.Timeout;
+const ghostCache: {
+  [key: string]: { scared: boolean; timer: NodeJS.Timeout | undefined };
+} = {};
 
 const Canvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -354,6 +356,10 @@ const Canvas = () => {
       })
     );
 
+    ghosts.forEach((ghost) => {
+      ghostCache[ghost.color] = { scared: false, timer: undefined };
+    });
+
     // draw
     let animationId: number;
     function animate() {
@@ -479,12 +485,20 @@ const Canvas = () => {
           if (pellet.radius === Pellet.PowerUpRadius) {
             ghosts.forEach((ghost) => {
               setScore((prev) => prev + 40);
+              ghostCache[ghost.color].scared = true;
               ghost.scared = true;
-              if (timer) clearTimeout(timer);
-              timer = setTimeout(function () {
-                ghost.scared = false;
-                clearTimeout(timer);
-              }, 5000);
+              if (ghostCache[ghost.color].scared) {
+                clearTimeout(ghostCache[ghost.color].timer);
+                ghostCache[ghost.color].timer = setTimeout(function () {
+                  ghostCache[ghost.color].scared = false;
+                  ghost.scared = false;
+                }, 5000);
+              } else {
+                ghostCache[ghost.color].timer = setTimeout(function () {
+                  ghostCache[ghost.color].scared = false;
+                  ghost.scared = false;
+                }, 5000);
+              }
             });
           }
         }
