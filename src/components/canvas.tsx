@@ -9,6 +9,8 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 
 const imageCache: { [key: string]: HTMLImageElement } = {};
 
+let timer: NodeJS.Timeout;
+
 const Canvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { setGameStatus } = useStateContext();
@@ -478,8 +480,10 @@ const Canvas = () => {
             ghosts.forEach((ghost) => {
               setScore((prev) => prev + 40);
               ghost.scared = true;
-              setTimeout(function () {
+              if (timer) clearTimeout(timer);
+              timer = setTimeout(function () {
                 ghost.scared = false;
+                clearTimeout(timer);
               }, 5000);
             });
           }
