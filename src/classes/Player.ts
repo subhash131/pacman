@@ -8,7 +8,7 @@ type PlayerConstructor = {
 };
 
 export class Player {
-  static SPEED = 5;
+  static SPEED = 2;
   position: Position;
   velocity: Velocity;
   canvasContext: CanvasRenderingContext2D;
