@@ -10,7 +10,7 @@ type GhostConstructor = {
 };
 
 export class Ghost {
-  public static speed: number = 2;
+  public static speed: number = 1;
   position: Position;
   velocity: Velocity;
   radius: number;
